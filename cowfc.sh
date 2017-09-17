@@ -280,6 +280,16 @@ fi
 function install_website {
 # First we will delete evertyhing inside of /var/www/html
 rm -rf /var/www/html/*
+# Let's download the HTML5 template SBAdmin so that the Admin GUI looks nice
+# Download the stuff
+wget https://github.com/BlackrockDigital/startbootstrap-sb-admin/archive/gh-pages.zip
+unzip gh-pages.zip
+if [ $? != "0" ] ; then
+	apt-get install unzip -y
+	unzip gh-pages.zip
+fi
+# Copy required directories and files to /var/www/html
+cp /var/www/startbootstrap-sb-admin-gh-pages/css/ /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/js /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/scss/ /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/vendor/ /var/www/html/ -R
 # Then we will copy the website files from our CoWFC Git
 cp /var/www/CoWFC/Web/* /var/www/html -R
 # Let's restart Apache now
@@ -324,6 +334,19 @@ install_website # Install the web contents for CoWFC
 config_mysql # We will set up the mysql password as "passwordhere" and create our first user
 re # Set up reCaptcha
 add-cron #Makes it so master server can start automatically on boot
+#a fix to fix issue: polaris-/dwc_network_server_emulator#413
+read -p "Do you want to add 'HttpProtocolOptions Unsafe LenientMethods Allow0.9' to apache2.conf this fixes when you have error codes like: 23400 on games [y/n] "
+if [ $REPLY == "y" ] ; then
+    echo "Fixing it! adding: HttpProtocolOptions Unsafe LenientMethods Allow0.9"
+    echo "to your apache2.conf!"
+cat >>/etc/apache2/apache2.conf <<EOF
+HttpProtocolOptions Unsafe LenientMethods Allow0.9
+EOF
+else
+    echo "Okay I won't attempt to fix the error"
+    echo "If for whatever reason you need to in the future type the following in to your /etc/apache2/apache2.conf:"
+    echo "HttpProtocolOptions Unsafe LenientMethods Allow0.9"
+fi
 echo "Thank you for installing CoWFC. One thing to note is that this script does not come with the HTML5 templates, so things may look messy. You may install whatever HTML5 templates you want and modify the webpages to your heart's content."
 echo "If you wish to access the admin GUI, please go to http://YOURSERVERADDRESS/?page=admin&section=Dashboard"
 reboot
