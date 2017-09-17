@@ -188,6 +188,10 @@ function install_required_packages {
 if [ ! -f "/var/www/.php71-added" ] ; then
     echo "Adding the PHP 7.1 repository. Please follow any prompts."
     add-apt-repository ppa:ondrej/php
+if [ $? != "0" ] ; then
+    apt-get install software-properties-common python-software-properties -y
+    add-apt-repository ppa:ondrej/php
+fi
     sleep 2s
     echo "Creating file to tell the script you already added the repo"
     touch "/var/www/.php71-added"
