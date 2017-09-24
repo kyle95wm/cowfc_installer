@@ -1,8 +1,19 @@
 #!/bin/bash
 # DWC Network Installer script by kyle95wm/beanjr - re-written for CoWFC
+# Check if we already installed the server
+if [ -f /etc/.dwc_installed ] ; then
+echo "You already installed CoWFC. There is no need to re-run it.
+Perhaps some time down the road we can offer an uninstall option.
+For now, if you wish to uninstall everything, just nuke your system.
+You shouldn't have anything else on it anyways."
+exit 999
+fi
+# ensure running as root
+if [ "$(id -u)" != "0" ]; then
+  exec sudo "$0" "$@" 
+fi
 
 # Variables used by the script in various sections to pre-fill long commandds
-ROOT_UID="0"
 IP="" # Used for user input
 ip=$(curl -s icanhazip.com) # This variable shows the user's external IP
 home_ip=$(echo $SSH_CLIENT | awk '{ print $1}')
@@ -350,6 +361,9 @@ fi
 echo "Thank you for installing CoWFC. One thing to note is that this script does not come with the HTML5 templates, so things may look messy. You may install whatever HTML5 templates you want and modify the webpages to your heart's content."
 echo "If you wish to access the admin GUI, please go to http://YOURSERVERADDRESS/?page=admin&section=Dashboard"
 reboot
+# Let's make our hidden file so that our script will know that we've already installed the server
+# This will prevent accidental re-runs
+touch /etc/.dwc_installed
 exit 0
 # DO NOT PUT COMMANDS UNDER THIS FI
 fi
