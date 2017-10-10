@@ -308,8 +308,10 @@ service apache2 restart
 }
 
 # MAIN
-# First we will check if we are on Ubuntu
-if [  -n "$(uname -a | grep Ubuntu)" ]; then
+# First we will check if we are on Ubuntu - this isn't 100% going to work,
+# but if we're running Debian, it should be enough for what we need this check
+# to do.
+if [ -f /etc/lsb-release ]; then
     CANRUN="TRUE"
 else
     CANRUN="FALSE"
