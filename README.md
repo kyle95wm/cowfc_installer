@@ -7,3 +7,10 @@ This script installs the CoWFC front-end and back-end from https://github.com/mh
 
 # TODO
 - Automate install for HTML5 Landed template
+
+# NOTES
+
+This script comes in 3 phases. Each phase involves a reboot
+-	Add the PHP 7.1 repo
+-	Continue CoWFC install
+-	Reboot after CoWFC instal
