@@ -8,6 +8,32 @@ This script installs the CoWFC front-end and back-end from https://github.com/mh
 # TODO
 - Automate install for HTML5 Landed template
 
+# How to use
+## Phase 1
+Run the following commands:
+-	mkdir /var/www
+-	cd /var/www
+-	chmod +x cowfc.sh
+-	./cowfc.sh
+
+The script will update your system. It will then ask you to add the PHP 7.1 repository to APT. Press ENTER
+
+## Phase 2
+
+After reboot, run the following commands:
+-	cd /var/www
+-	./cowfc.sh
+
+The script will continue the install and reboot your server when done
+
+## Phase 3
+
+This last phase fixes a bug whe gpcm.db does not have proper file permissions.
+
+Let the server boot up, and wait a minute or so and issue:
+-	reboot
+
+This will reboot the server and set proper permissions
 # NOTES
 
 This script comes in 3 phases. Each phase involves a reboot
