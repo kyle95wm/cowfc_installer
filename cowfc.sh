@@ -360,12 +360,26 @@ else
     echo "If for whatever reason you need to in the future type the following in to your /etc/apache2/apache2.conf:"
     echo "HttpProtocolOptions Unsafe LenientMethods Allow0.9"
 fi
+echo "Disabling un-used features that came with the CoWFC source...."
+mkdir /var/www/html/_admin/.disabled
+mv "/var/www/html/_admin/Fc Bans.php" "/var/www/html/_admin/.disabled"
+if [ $? != "0" ] ; then
+echo "FAILED!"
+fi
+mv "/var/www/html/_admin/Sn Bans.php" "/var/www/html/_admin/.disabled"
+if [ $? != "0" ] ; then
+echo "FAILED!"
+fi
+mv "/var/www/html/_admin/Mac Bans.php" "/var/www/html/_admin/.disabled"
+if [ $? != "0" ] ; then
+echo "FAILED!"
+fi
 echo "Thank you for installing CoWFC. One thing to note is that this script does not come with the HTML5 templates, so things may look messy. You may install whatever HTML5 templates you want and modify the webpages to your heart's content."
 echo "If you wish to access the admin GUI, please go to http://YOURSERVERADDRESS/?page=admin&section=Dashboard"
-reboot
 # Let's make our hidden file so that our script will know that we've already installed the server
 # This will prevent accidental re-runs
 touch /etc/.dwc_installed
+reboot
 exit 0
 # DO NOT PUT COMMANDS UNDER THIS FI
 fi
