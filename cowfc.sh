@@ -369,6 +369,7 @@ install_website # Install the web contents for CoWFC
 config_mysql # We will set up the mysql password as "passwordhere" and create our first user
 re # Set up reCaptcha
 add-cron #Makes it so master server can start automatically on boot
+set-server-name # Set your server's name
 #a fix to fix issue: polaris-/dwc_network_server_emulator#413
 read -p "Do you want to add 'HttpProtocolOptions Unsafe LenientMethods Allow0.9' to apache2.conf this fixes when you have error codes like: 23400 on games [y/n] "
 if [ $REPLY == "y" ] ; then
