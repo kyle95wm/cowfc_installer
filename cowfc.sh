@@ -255,6 +255,13 @@ echo "Now inserting user $firstuser into the database with password $firstpasswd
 echo "insert into users (Username, Password, Rank) values ('$firstuser','$firstpasswdhashed','$firstuserrank');" | mysql -u root -ppasswordhere cowfc
 }
 function re {
+echo "For added security, we recommend setting up Google's reCaptcha.
+
+However, not many people would care about this, so we're making it optional.
+
+Feel free to press the ENTER key at the prompt, to skip reCaptcha setup, or 'y' to proceed with recaptcha setup."
+read -p "Would you like to set up reCaptcha on this server? [y/N]: " recaptchacontinue
+if [ $recaptchacontinue == y ] ; then
 echo "In order to log into your Admin interface, you will need to set up reCaptcha keys. This script will walk you through it"
 echo "Please make an account over at https://www.google.com/recaptcha/"
 # Next we will ask the user for their secret key and site keys
@@ -262,9 +269,24 @@ read -p "Please enter the SECRET KEY you got from setting up reCaptcha: " secret
 read -p "Please enter the SITE KEY you got from setting up reCaptcha: " sitekey
 echo "Thank you! I will now add your SECRET KEY and SITE KEY to /var/www/html/_admin/Auth/Login.php"
 # Replace SECRET_KEY_HERE with the secret key from our $secretkey variable
-sed -i -e "s/SECRET_KEY_HERE/$secretkey/g" /var/www/html/_admin/Auth/Login.php
+#sed -i -e "s/SECRET_KEY_HERE/$secretkey/g" /var/www/html/_admin/Auth/Login.php
+sed -i -e "s/SECRET_KEY_HERE/$secretkey/g" /var/www/html/config.ini
 # Replace SITE_KEY_HERE with the site key from our $sitekey variable
 sed -i -e "s/SITE_KEY_HERE/$sitekey/g" /var/www/html/_admin/Auth/Login.php
+else
+sed -i -e "s/recaptcha_enabled = 1/recaptcha_enabled = 0/g" /var/www/html/config.ini
+fi
+}
+function set-server-name {
+echo "This recent CoWFC update allows you to set your server's name"
+echo "This is useful if you want to whitelabel your server, and not advertise it as CoWFC"
+read -p "Please enter the server name, or press ENTER to accept the default [CoWFC]: " servernameconfig
+if [ -z "$servernameconfig" ] ; then
+echo "Using CoWFC as the server name."
+else
+echo "Setting server name to $servernameconfig"
+sed -i -e "s/name = 'CoWFC'/$name = '$servernameconfig'/g" /var/www/html/config.ini
+fi
 }
 function add-cron {
 echo "Checking if there is a cron available for $USER"
