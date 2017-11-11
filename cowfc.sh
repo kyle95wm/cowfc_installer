@@ -285,7 +285,7 @@ if [ -z "$servernameconfig" ] ; then
 echo "Using CoWFC as the server name."
 else
 echo "Setting server name to $servernameconfig"
-sed -i -e "s/name = 'CoWFC'/$name = '$servernameconfig'/g" /var/www/html/config.ini
+sed -i -e "s/name = 'CoWFC'/name = '$servernameconfig'/g" /var/www/html/config.ini
 fi
 }
 function add-cron {
