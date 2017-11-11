@@ -351,11 +351,13 @@ if [ $CANRUN == "TRUE" ] ; then
         # Then we will check to see if the Gits for CoWFC and dwc_network_server_emulator exist
         if [ ! -d "/var/www/CoWFC" ] ; then
             echo "Git for CoWFC does not exist in /var/www/"
-            git clone https://github.com/kyle95wm/CoWFC.git
+            git clone https://github.com/mh9924/CoWFC.git
+            #git clone https://github.com/kyle95wm/CoWFC.git
         fi
         if [ ! -d "/var/www/dwc_network_server_emulator" ] ; then
             echo "Git for dwc_network_server_emulator does not exist in /var/www"
-            git clone https://github.com/kyle95wm/dwc_network_server_emulator.git
+            git clone https://github.com/mh9924/dwc_network_server_emulator.git
+            #git clone https://github.com/kyle95wm/dwc_network_server_emulator.git
             echo "Setting proper file permissions"
             chmod 777 /var/www/dwc_network_server_emulator/ -R
         fi
