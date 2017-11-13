@@ -334,9 +334,12 @@ service apache2 restart
 # but if we're running Debian, it should be enough for what we need this check
 # to do.
 if [ -f /etc/lsb-release ]; then
+cat /etc/lsb-release | grep "14.04"
+if [ $? == 0 ] ; then
     CANRUN="TRUE"
 else
     CANRUN="FALSE"
+fi
 fi
 
 # Determine if our script can run
@@ -410,6 +413,6 @@ exit 0
 fi
 else
     echo "Sorry, you do not appear to be running a supported Opperating System."
-    echo "Please make sure you are running the latest version of Ubuntu and try again!"
+    echo "Please make sure you are running Ubuntu 14.04, and try again!"
     exit 1
 fi
