@@ -200,7 +200,7 @@ if [ ! -f "/var/www/.php71-added" ] ; then
     echo "Adding the PHP 7.1 repository. Please follow any prompts."
     add-apt-repository ppa:ondrej/php
 if [ $? != "0" ] ; then
-    apt-get install --force-yes software-properties-common python-software-properties -y
+    apt-get install --allow-yes software-properties-common python-software-properties -y
     add-apt-repository ppa:ondrej/php
 fi
     sleep 2s
@@ -216,9 +216,9 @@ fi
 dpkg --configure -a
 echo "Updating & installing PHP 7.1 onto your system..."
 apt-get update
-apt-get install --force-yes php7.1 -y
+apt-get install --allow-yes php7.1 -y
 # Install the other required packages
-apt-get install --force-yes apache2 python2.7 python-twisted dnsmasq git curl -y
+apt-get install --allow-yes apache2 python2.7 python-twisted dnsmasq git curl -y
 }
 function config_mysql {
 echo "We will now configure MYSQL server."
@@ -230,8 +230,8 @@ apt-get -y install mysql-server
 # The below sed command has NOT been tested so we don't know if this will work or not.
 #sed -i -e 's/passwordhere/passwordhere/g' /var/www/html/_site/AdminPage.php
 # Next we will install two more packages to make mysql and sqlite work with PHP
-apt-get install --force-yes php7.1-mysql -y
-apt-get install --force-yes sqlite php-sqlite3 -y
+apt-get install --allow-yes php7.1-mysql -y
+apt-get install --allow-yes sqlite php-sqlite3 -y
 # Now we will set up our first admin user
 echo "Now we're going to set up our first Admin Portal user."
 read -p "Please enter the username you wish to use: " firstuser
@@ -318,7 +318,7 @@ rm -rf /var/www/html/*
 wget https://github.com/BlackrockDigital/startbootstrap-sb-admin/archive/gh-pages.zip
 unzip gh-pages.zip
 if [ $? != "0" ] ; then
-	apt-get --force-yes install unzip -y
+	apt-get --allow-yes install unzip -y
 	unzip gh-pages.zip
 fi
 # Copy required directories and files to /var/www/html
@@ -414,5 +414,23 @@ fi
 else
     echo "Sorry, you do not appear to be running a supported Opperating System."
     echo "Please make sure you are running Ubuntu 14.04, and try again!"
+    echo "If you understand the risks of installing this onto an un-supported system, please run the script with --force"
     exit 1
+fi
+# Below is what happens when --force is used as an argument
+if [ $1 == "--force" ] ; then
+echo "
+###########################################################################
+###########################################################################
+	WARNING!!!!! YOU HAVE CHOSEN TO RUN THIS INSTALLER
+	IN FORCED MODE. DOING THIS IS VERY RISKY, AS THIS SCRIPT IS
+	BUILD AROUND UBUNTU, ESPECIALLY 14.04. THE AUTHOUR OF THIS SCRIPT
+	WILL NOT BE HELD RESPONSIBLE FOR ANY HARM CAUSED TO YOUR SYSTEM.
+###########################################################################
+###########################################################################
+"
+read -p "Please enter AGREE to continue: " forced
+if [ $forced == "AGREE" ] ; then
+CANRUN=TRUE
+fi
 fi
