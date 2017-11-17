@@ -418,23 +418,5 @@ fi
 else
     echo "Sorry, you do not appear to be running a supported Opperating System."
     echo "Please make sure you are running Ubuntu 14.04, and try again!"
-    echo "If you understand the risks of installing this onto an un-supported system, please run the script with --force"
     exit 1
-fi
-# Below is what happens when --force is used as an argument
-if [ $1 == "--force" ] ; then
-echo "
-###########################################################################
-###########################################################################
-	WARNING!!!!! YOU HAVE CHOSEN TO RUN THIS INSTALLER
-	IN FORCED MODE. DOING THIS IS VERY RISKY, AS THIS SCRIPT IS
-	BUILD AROUND UBUNTU, ESPECIALLY 14.04. THE AUTHOUR OF THIS SCRIPT
-	WILL NOT BE HELD RESPONSIBLE FOR ANY HARM CAUSED TO YOUR SYSTEM.
-###########################################################################
-###########################################################################
-"
-read -p "Please enter AGREE to continue: " forced
-if [ $forced == "AGREE" ] ; then
-CANRUN=TRUE
-fi
 fi
