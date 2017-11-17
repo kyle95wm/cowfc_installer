@@ -313,6 +313,7 @@ fi
 function install_website {
 # First we will delete evertyhing inside of /var/www/html
 rm -rf /var/www/html/*
+if [ $1 != varonfi ] ; then
 # Let's download the HTML5 template SBAdmin so that the Admin GUI looks nice
 # Download the stuff
 wget https://github.com/BlackrockDigital/startbootstrap-sb-admin/archive/gh-pages.zip
@@ -323,6 +324,7 @@ if [ $? != "0" ] ; then
 fi
 # Copy required directories and files to /var/www/html
 cp /var/www/startbootstrap-sb-admin-gh-pages/css/ /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/js /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/scss/ /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/vendor/ /var/www/html/ -R
+fi
 # Then we will copy the website files from our CoWFC Git
 cp /var/www/CoWFC/Web/* /var/www/html -R
 # Let's restart Apache now
