@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 # DWC Network Installer script by kyle95wm/beanjr - re-written for CoWFC
-# We'll first set some standard script options
-# This one exits the script IMMEDIATLY if there are empty variables
-set -o nounset
 # Check if we already installed the server
 if [ -f /etc/.dwc_installed ] ; then
 echo "You already installed CoWFC. There is no need to re-run it.
@@ -313,7 +310,7 @@ fi
 function install_website {
 # First we will delete evertyhing inside of /var/www/html
 rm -rf /var/www/html/*
-if [ $1 != varonfi ] ; then
+if [ ! -f /.varonfi ] ; then
 # Let's download the HTML5 template SBAdmin so that the Admin GUI looks nice
 # Download the stuff
 wget https://github.com/BlackrockDigital/startbootstrap-sb-admin/archive/gh-pages.zip
@@ -357,6 +354,7 @@ if [ $CANRUN == "TRUE" ] ; then
         if [ ! -d "/var/www/CoWFC" ] ; then
             echo "Git for CoWFC does not exist in /var/www/"
 	    if [ $1 == varonfi ] ; then
+	    touch /.varonfi
             git clone https://github.com/kyle95wm/varonfi.git
             mv /var/www/varonfi /var/www/CoWFC
 	    else
