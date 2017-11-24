@@ -232,11 +232,8 @@ apt-get install --force-yes sqlite php-sqlite3 -y
 # Now we will set up our first admin user
 echo "Now we're going to set up our first Admin Portal user."
 read -p "Please enter the username you wish to use: " firstuser
-read -p "Please enter the password you wish to use for $firstuser: " firstpasswd
-echo "Now hasing the password for $firstuser....."
-echo "Please copy the hash below to your clipboard and paste it into the upcoming prompt"
-/var/www/CoWFC/SQL/bcrypt-hash "$firstpasswd"
-read -p "Please paste the bcrypt hash (above) for the password you set for $firstuser: " firstpasswdhashed
+read -p "Please enter a password: " password
+hash=$(/var/www/CoWFC/SQL/bcrypt-hash "$password")
 echo "We will now set the rank for $firstuser"
 echo "At the moment, this does nothing. However in later releases, we plan to restrict who can do what."
 echo "1: First Rank"
@@ -249,7 +246,7 @@ echo "create database cowfc" | mysql -u root -ppasswordhere
 echo "Now importing dumped cowfc database..."
 mysql -u root -ppasswordhere cowfc < /var/www/CoWFC/SQL/cowfc.sql
 echo "Now inserting user $firstuser into the database with password $firstpasswd, hashed as $firstpasswdhashed."
-echo "insert into users (Username, Password, Rank) values ('$firstuser','$firstpasswdhashed','$firstuserrank');" | mysql -u root -ppasswordhere cowfc
+echo "insert into users (Username, Password, Rank) values ('$firstuser','$hash','$firstuserrank');" | mysql -u root -ppasswordhere cowfc
 }
 function re {
 echo "For added security, we recommend setting up Google's reCaptcha.
@@ -311,7 +308,6 @@ fi
 function install_website {
 # First we will delete evertyhing inside of /var/www/html
 rm -rf /var/www/html/*
-if [ ! -f /.varonfi ] ; then
 # Let's download the HTML5 template SBAdmin so that the Admin GUI looks nice
 # Download the stuff
 wget https://github.com/BlackrockDigital/startbootstrap-sb-admin/archive/gh-pages.zip
@@ -319,7 +315,6 @@ unzip gh-pages.zip
 if [ $? != "0" ] ; then
 	apt-get --force-yes install unzip -y
 	unzip gh-pages.zip
-fi
 # Copy required directories and files to /var/www/html
 cp /var/www/startbootstrap-sb-admin-gh-pages/css/ /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/js /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/scss/ /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/vendor/ /var/www/html/ -R
 fi
@@ -354,13 +349,7 @@ if [ $CANRUN == "TRUE" ] ; then
         # Then we will check to see if the Gits for CoWFC and dwc_network_server_emulator exist
         if [ ! -d "/var/www/CoWFC" ] ; then
             echo "Git for CoWFC does not exist in /var/www/"
-	    if [ $1 == varonfi ] ; then
-	    touch /.varonfi
-            git clone https://github.com/kyle95wm/varonfi.git
-            mv /var/www/varonfi /var/www/CoWFC
-	    else
 	    #git clone https://github.com/kyle95wm/CoWFC.git
-            fi
             git clone https://github.com/mh9924/CoWFC.git
         fi
         if [ ! -d "/var/www/dwc_network_server_emulator" ] ; then
