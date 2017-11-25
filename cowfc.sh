@@ -18,8 +18,29 @@ IP="" # Used for user input
 mod1="proxy" # This is a proxy mod that is dependent on the other 2
 mod2="proxy_http" # This is related to mod1
 mod3="php7.1"
-
+UPDATE_FILE="$0.tmp"
+UPDATE_BASE="http://raw.githubusercontent.com/kyle95wm/scripts/master/update"
 # Functions
+
+function update {
+# The following lines will check for an update to this script if the -s switch
+# is not used.
+
+# Original code by Dennis Simpson
+# Modified by Kyle Warwick-Mathieu
+echo "Checking if script is up to date, please wait"
+wget -nv -O $UPDATE_FILE $UPDATE_BASE >& /dev/null
+diff $0 $UPDATE_FILE >& /dev/null
+if [ "$?" != "0" -a -s $UPDATE_FILE ]; then 
+	mv $UPDATE_FILE $0
+	chmod +x $0
+	echo "$0 updated"
+	$0 -s
+	exit
+else
+	rm $UPDATE_FILE # If no updates are available, simply remove the file
+	fi
+}
 
 function create_apache_vh_nintendo {
 # This function will create virtual hosts for Nintendo's domains in Apache
@@ -329,6 +350,10 @@ chmod 777 /var/www/dwc_network_server_emulator/ -R
 }
 
 # MAIN
+# Call update function
+if [ "$1" != "-s" ]; then # If there is no -s argument then run the updater
+	update # This will call our update function
+fi
 # First we will check if we are on Ubuntu - this isn't 100% going to work,
 # but if we're running Debian, it should be enough for what we need this check
 # to do.
