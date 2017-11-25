@@ -320,8 +320,12 @@ cp /var/www/startbootstrap-sb-admin-gh-pages/css/ /var/www/html/ -R && cp /var/w
 fi
 # Then we will copy the website files from our CoWFC Git
 cp /var/www/CoWFC/Web/* /var/www/html -R
+chmod 777 /var/www/html/bans.log
 # Let's restart Apache now
 service apache2 restart
+echo "Creating gpcm.db file" # THIS IS EXPERIMENTAL AND MAY BREAK!
+touch /var/www/dwc_network_server_emulator/gpcm.db
+chmod 777 /var/www/dwc_network_server_emulator/ -R
 }
 
 # MAIN
