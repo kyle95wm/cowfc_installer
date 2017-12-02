@@ -13,6 +13,16 @@ if [ "$(id -u)" != "0" ]; then
   exec sudo "$0" "$@" 
 fi
 
+# We'll assume the user is from an English locale
+if [ ! -f /var/www/.locale-done ] ; then
+	locale-gen en_US.UTF-8
+	if [ $? != "0" ] ; then
+		apt-get install -y language-pack-en-base
+	fi
+fi
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
 # Variables used by the script in various sections to pre-fill long commandds
 IP="" # Used for user input
 mod1="proxy" # This is a proxy mod that is dependent on the other 2
