@@ -23,6 +23,9 @@ fi
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
+# We'll create our secret locale file
+touch /var/www/.locale-done
+
 # Variables used by the script in various sections to pre-fill long commandds
 IP="" # Used for user input
 mod1="proxy" # This is a proxy mod that is dependent on the other 2
