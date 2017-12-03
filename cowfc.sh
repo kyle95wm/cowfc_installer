@@ -349,9 +349,9 @@ unzip gh-pages.zip
 if [ $? != "0" ] ; then
 	apt-get --force-yes install unzip -y
 	unzip gh-pages.zip
+fi
 # Copy required directories and files to /var/www/html
 cp /var/www/startbootstrap-sb-admin-gh-pages/css/ /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/js /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/scss/ /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/vendor/ /var/www/html/ -R
-fi
 # Then we will copy the website files from our CoWFC Git
 cp /var/www/CoWFC/Web/* /var/www/html -R
 chmod 777 /var/www/html/bans.log
