@@ -342,16 +342,6 @@ fi
 function install_website {
 # First we will delete evertyhing inside of /var/www/html
 rm -rf /var/www/html/*
-# Let's download the HTML5 template SBAdmin so that the Admin GUI looks nice
-# Download the stuff
-wget https://github.com/BlackrockDigital/startbootstrap-sb-admin/archive/gh-pages.zip
-unzip gh-pages.zip
-if [ $? != "0" ] ; then
-	apt-get --force-yes install unzip -y
-	unzip gh-pages.zip
-fi
-# Copy required directories and files to /var/www/html
-cp /var/www/startbootstrap-sb-admin-gh-pages/css/ /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/js /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/scss/ /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/vendor/ /var/www/html/ -R
 # Then we will copy the website files from our CoWFC Git
 cp /var/www/CoWFC/Web/* /var/www/html -R
 chmod 777 /var/www/html/bans.log
@@ -391,8 +381,8 @@ if [ $CANRUN == "TRUE" ] ; then
         # Then we will check to see if the Gits for CoWFC and dwc_network_server_emulator exist
         if [ ! -d "/var/www/CoWFC" ] ; then
             echo "Git for CoWFC does not exist in /var/www/"
-	    #git clone https://github.com/kyle95wm/CoWFC.git
-            git clone https://github.com/mh9924/CoWFC.git
+	    git clone https://github.com/kyle95wm/CoWFC.git
+            #git clone https://github.com/mh9924/CoWFC.git
         fi
         if [ ! -d "/var/www/dwc_network_server_emulator" ] ; then
             echo "Git for dwc_network_server_emulator does not exist in /var/www"
