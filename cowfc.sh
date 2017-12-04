@@ -403,18 +403,9 @@ re # Set up reCaptcha
 add-cron #Makes it so master server can start automatically on boot
 set-server-name # Set your server's name
 #a fix to fix issue: polaris-/dwc_network_server_emulator#413
-read -p "Do you want to add 'HttpProtocolOptions Unsafe LenientMethods Allow0.9' to apache2.conf this fixes when you have error codes like: 23400 on games [y/n] "
-if [ $REPLY == "y" ] ; then
-    echo "Fixing it! adding: HttpProtocolOptions Unsafe LenientMethods Allow0.9"
-    echo "to your apache2.conf!"
 cat >>/etc/apache2/apache2.conf <<EOF
 HttpProtocolOptions Unsafe LenientMethods Allow0.9
 EOF
-else
-    echo "Okay I won't attempt to fix the error"
-    echo "If for whatever reason you need to in the future type the following in to your /etc/apache2/apache2.conf:"
-    echo "HttpProtocolOptions Unsafe LenientMethods Allow0.9"
-fi
 echo "Disabling un-used features that came with the CoWFC source...."
 mkdir /var/www/html/_admin/.disabled
 mv "/var/www/html/_admin/Fc Bans.php" "/var/www/html/_admin/.disabled"
