@@ -333,6 +333,10 @@ cd /
 EOF
 chmod 777 /start-altwfc.sh
 mkdir -p /cron-logs
+which crontab
+if [ $? != 0 ] ; then
+apt-get install cron -y
+fi
 echo "Creating the cron job now!"
 echo "@reboot sh /start-altwfc.sh >/cron-logs/cronlog 2>&1" >/tmp/alt-cron
 crontab -u $USER /tmp/alt-cron
