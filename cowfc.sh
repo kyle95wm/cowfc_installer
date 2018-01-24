@@ -13,6 +13,15 @@ if [ "$(id -u)" != "0" ]; then
   exec sudo "$0" "$@" 
 fi
 
+# We will test internet connectivity using ping
+ping -c 4 google.com >/dev/nul
+if [ $? == 0 ] ; then 
+	echo "Internet is OK" 
+else 
+	echo "Internet connection test failed!"
+	exit 1 
+fi
+
 # We'll assume the user is from an English locale
 if [ ! -f /var/www/.locale-done ] ; then
 	locale-gen en_US.UTF-8
