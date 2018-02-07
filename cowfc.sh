@@ -386,7 +386,7 @@ if [ $? == 0 ] ; then
 else
     echo "It looks like you are not running Ubuntu 14.04."
     echo "If you are running Ubuntu 16.04, this script MIGHT work, but dnsmasq doesn't work properly on platforms like Vultr."
-    read -p "Would you like to give it a try? (n): " [y/n] giveitatry
+    read -p "Would you like to give it a try? (n):  [y/n] " giveitatry
     if [ $giveitatry == y ] ; then
     	CANRUN="TRUE"
     else
