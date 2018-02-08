@@ -230,9 +230,12 @@ clear
 }
 
 function install_required_packages {
-echo "Updating & installing PHP 7.0 onto your system..."
+echo "Updating & installing PHP 7.1 onto your system..."
+apt-get install apt-transport-https lsb-release ca-certificates
+wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
 apt-get update
-apt-get install --force-yes php -y
+apt-get install --force-yes php7.1 -y
 # Install the other required packages
 apt-get install --force-yes apache2 python2.7 python-twisted dnsmasq git curl -y
 }
@@ -246,8 +249,8 @@ apt-get -y install mysql-server
 # The below sed command has NOT been tested so we don't know if this will work or not.
 #sed -i -e 's/passwordhere/passwordhere/g' /var/www/html/_site/AdminPage.php
 # Next we will install two more packages to make mysql and sqlite work with PHP
-apt-get install --force-yes php-mysql -y
-apt-get install --force-yes sqlite php-sqlite3 -y
+apt-get install --force-yes php7.1-mysql -y
+apt-get install --force-yes sqlite php7.1-sqlite3 -y
 # Now we will set up our first admin user
 echo "Now we're going to set up our first Admin Portal user."
 read -p "Please enter the username you wish to use: " firstuser
