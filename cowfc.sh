@@ -271,7 +271,7 @@ apt-get -y install mysql-server
 #sed -i -e 's/passwordhere/passwordhere/g' /var/www/html/_site/AdminPage.php
 # Next we will install two more packages to make mysql and sqlite work with PHP
 apt-get install --force-yes php7.1-mysql -y
-apt-get install --force-yes sqlite php-sqlite3 -y
+apt-get install --force-yes sqlite php7.1-sqlite3 -y
 # Now we will set up our first admin user
 echo "Now we're going to set up our first Admin Portal user."
 read -p "Please enter the username you wish to use: " firstuser
@@ -370,12 +370,12 @@ chmod 777 /var/www/dwc_network_server_emulator/ -R
 if [ "$1" != "-s" ]; then # If there is no -s argument then run the updater
 	update # This will call our update function
 fi
-echo "******************************************* WARNING!*******************
-*****************************************************************************
-IT HAS BEEN DISCOVERED THAT BUILDS ON THE LATEST UBUNTU UPDATES WILL FAIL!
-*****************************************************************************
-"
-read -p "Press [ENTER] to continue at your own risk, or ctrl+c to abort."
+#echo "******************************************* WARNING!*******************
+#*****************************************************************************
+#IT HAS BEEN DISCOVERED THAT BUILDS ON THE LATEST UBUNTU UPDATES WILL FAIL!
+#*****************************************************************************
+#"
+#read -p "Press [ENTER] to continue at your own risk, or ctrl+c to abort."
 # First we will check if we are on Ubuntu - this isn't 100% going to work,
 # but if we're running Debian, it should be enough for what we need this check
 # to do.
