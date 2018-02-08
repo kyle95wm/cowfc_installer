@@ -240,7 +240,7 @@ function config_mysql {
 echo "We will now configure MYSQL server."
 debconf-set-selections <<< 'mysql-server mysql-server/root_password password passwordhere'
 debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password passwordhere'
-apt-get -y install mariadb-server-10.0
+apt-get -y install mysql-server
 # We will now set the new mysql password in the AdminPage.php file.
 # Do not change "passwordhere", as this will be the base for replacing it later
 # The below sed command has NOT been tested so we don't know if this will work or not.
