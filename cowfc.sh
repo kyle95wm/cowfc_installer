@@ -383,7 +383,7 @@ if [ -f /etc/lsb-release ] ; then
 cat /etc/lsb-release | grep "14.04"
 if [ $? == 0 ] ; then
     CANRUN="TRUE"
-elif [ -f /var/www/.aws_install ] l then
+elif [ -f /var/www/.aws_install ] ; then
     CANRUN="TRUE"
 else
     echo "It looks like you are not running Ubuntu 14.04."
