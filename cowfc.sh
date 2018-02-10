@@ -288,7 +288,7 @@ echo "Setting up the cowfc users database"
 echo "create database cowfc" | mysql -u root -ppasswordhere
 echo "Now importing dumped cowfc database..."
 mysql -u root -ppasswordhere cowfc < /var/www/CoWFC/SQL/cowfc.sql
-echo "Now inserting user $firstuser into the database with password $firstpasswd, hashed as $firstpasswdhashed."
+echo "Now inserting user $firstuser into the database with password $password, hashed as $firstpasswdhashed."
 echo "insert into users (Username, Password, Rank) values ('$firstuser','$hash','$firstuserrank');" | mysql -u root -ppasswordhere cowfc
 }
 function re {
@@ -379,7 +379,7 @@ fi
 # First we will check if we are on Ubuntu - this isn't 100% going to work,
 # but if we're running Debian, it should be enough for what we need this check
 # to do.
-if [ -f /etc/lsb-release ]; then
+if [ -f /etc/lsb-release ] || [ -f /var/www/.awc_install ] ; then
 cat /etc/lsb-release | grep "14.04"
 if [ $? == 0 ] ; then
     CANRUN="TRUE"
