@@ -357,11 +357,11 @@ function install_website {
 rm -rf /var/www/html/*
 # Let's download the HTML5 template SBAdmin so that the Admin GUI looks nice
 # Download the stuff
-#wget https://github.com/BlackrockDigital/startbootstrap-sb-admin/archive/gh-pages.zip
-#unzip gh-pages.zip
+#wget https://github.com/BlackrockDigital/startbootstrap-sb-admin/archive/gh-pages.zip -O sb-admin.zip
+#unzip sb-admin.zip
 #if [ $? != "0" ] ; then
 #	apt-get --force-yes install unzip -y
-#	unzip gh-pages.zip
+#	unzip sb-admin.zip
 #fi
 # Copy required directories and files to /var/www/html
 #cp /var/www/startbootstrap-sb-admin-gh-pages/css/ /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/js /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/scss/ /var/www/html/ -R && cp /var/www/startbootstrap-sb-admin-gh-pages/vendor/ /var/www/html/ -R
