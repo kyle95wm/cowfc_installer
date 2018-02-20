@@ -368,7 +368,9 @@ rm -rf /var/www/html/*
 
 # We'll download and install the main template next
 
-# Code goes here to download main template.
+#wget https://html5up.net/landed/download -O html5up-landed.zip
+#unzip html5up-landed.zip -d landed
+# We could put varous cp commands here to copy the needed files
 		
 # Then we will copy the website files from our CoWFC Git
 cp /var/www/CoWFC/Web/* /var/www/html -R
