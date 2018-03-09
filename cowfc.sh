@@ -14,8 +14,7 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 # We will test internet connectivity using ping
-ping -c 4 google.com >/dev/nul
-if [ $? == 0 ] ; then 
+if ping -c 4 google.com >/dev/nul ; then
 	echo "Internet is OK" 
 else 
 	echo "Internet connection test failed!"
@@ -24,8 +23,7 @@ fi
 
 # We'll assume the user is from an English locale
 if [ ! -f /var/www/.locale-done ] ; then
-	locale-gen en_US.UTF-8
-	if [ $? != "0" ] ; then
+	if ! locale-gen en_US.UTF-8 ; then
 		apt-get install -y language-pack-en-base
 	fi
 fi
@@ -51,16 +49,15 @@ function update {
 # Original code by Dennis Simpson
 # Modified by Kyle Warwick-Mathieu
 echo "Checking if script is up to date, please wait"
-wget -nv -O $UPDATE_FILE $UPDATE_BASE >& /dev/null
-diff $0 $UPDATE_FILE >& /dev/null
-if [ "$?" != "0" -a -s $UPDATE_FILE ]; then 
-	mv $UPDATE_FILE $0
-	chmod +x $0
+wget -nv -O "$UPDATE_FILE" "$UPDATE_BASE" >& /dev/null
+if ! diff "$0" "$UPDATE_FILE" >& /dev/null && [ -s "$UPDATE_FILE" ]; then
+	mv "$UPDATE_FILE" "$0"
+	chmod +x "$0"
 	echo "$0 updated"
-	$0 -s
+	"$0" -s
 	exit
 else
-	rm $UPDATE_FILE # If no updates are available, simply remove the file
+	rm "$UPDATE_FILE" # If no updates are available, simply remove the file
 	fi
 }
 
@@ -194,8 +191,7 @@ service apache2 restart
 function apache_mods {
 a2enmod $mod1 $mod2
 service apache2 restart
-a2enmod $mod3
-if [ $? != "0" ] ; then
+if ! a2enmod $mod3 ; then
 a2dismod mpm_event
 a2enmod $mod3
 service apache2 restart
@@ -222,7 +218,7 @@ hostname  -I | cut -f1 -d' '
 echo "Your external IP is:"
 curl -4 -s icanhazip.com
 echo "Please type in either your LAN or external IP"
-read -e IP
+read -re IP
 cat >>/etc/dnsmasq.conf <<EOF # Adds your IP you provide to the end of the DNSMASQ config file
 address=/nintendowifi.net/$IP
 address=/wiimmfi.de/$IP
@@ -238,8 +234,7 @@ function install_required_packages {
 # Add PHP 7.1 repo
 if [ ! -f "/var/www/.php71-added" ] ; then
     echo "Adding the PHP 7.1 repository. Please follow any prompts."
-    add-apt-repository ppa:ondrej/php
-if [ $? != "0" ] ; then
+if ! add-apt-repository ppa:ondrej/php ; then
     apt-get install --force-yes software-properties-common python-software-properties -y
     add-apt-repository ppa:ondrej/php
 fi
@@ -274,21 +269,21 @@ apt-get install --force-yes php7.1-mysql -y
 apt-get install --force-yes sqlite php7.1-sqlite3 -y
 # Now we will set up our first admin user
 echo "Now we're going to set up our first Admin Portal user."
-read -p "Please enter the username you wish to use: " firstuser
-read -p "Please enter a password: " password
+read -rp "Please enter the username you wish to use: " firstuser
+read -rp "Please enter a password: " password
 hash=$(/var/www/CoWFC/SQL/bcrypt-hash "$password")
 echo "We will now set the rank for $firstuser"
 echo "At the moment, this does nothing. However in later releases, we plan to restrict who can do what."
 echo "1: First Rank"
 echo "2: Second Rank"
 echo "3: Third Rank"
-read -p "Please enter a rank number [1-3]: " firstuserrank
+read -rp "Please enter a rank number [1-3]: " firstuserrank
 echo "That's all the informatio I'll need for now."
 echo "Setting up the cowfc users database"
 echo "create database cowfc" | mysql -u root -ppasswordhere
 echo "Now importing dumped cowfc database..."
 mysql -u root -ppasswordhere cowfc < /var/www/CoWFC/SQL/cowfc.sql
-echo "Now inserting user $firstuser into the database with password $password, hashed as $firstpasswdhashed."
+echo "Now inserting user $firstuser into the database with password $password, hashed as $hash."
 echo "insert into users (Username, Password, Rank) values ('$firstuser','$hash','$firstuserrank');" | mysql -u root -ppasswordhere cowfc
 }
 function re {
@@ -297,13 +292,13 @@ echo "For added security, we recommend setting up Google's reCaptcha.
 However, not many people would care about this, so we're making it optional.
 
 Feel free to press the ENTER key at the prompt, to skip reCaptcha setup, or 'y' to proceed with recaptcha setup."
-read -p "Would you like to set up reCaptcha on this server? [y/N]: " recaptchacontinue
-if [ $recaptchacontinue == y ] ; then
+read -rp "Would you like to set up reCaptcha on this server? [y/N]: " recaptchacontinue
+if [ "$recaptchacontinue" == y ] ; then
 echo "In order to log into your Admin interface, you will need to set up reCaptcha keys. This script will walk you through it"
 echo "Please make an account over at https://www.google.com/recaptcha/"
 # Next we will ask the user for their secret key and site keys
-read -p "Please enter the SECRET KEY you got from setting up reCaptcha: " secretkey
-read -p "Please enter the SITE KEY you got from setting up reCaptcha: " sitekey
+read -rp "Please enter the SECRET KEY you got from setting up reCaptcha: " secretkey
+read -rp "Please enter the SITE KEY you got from setting up reCaptcha: " sitekey
 echo "Thank you! I will now add your SECRET KEY and SITE KEY to /var/www/html/_admin/Auth/Login.php"
 # Replace SECRET_KEY_HERE with the secret key from our $secretkey variable
 #sed -i -e "s/SECRET_KEY_HERE/$secretkey/g" /var/www/html/_admin/Auth/Login.php
@@ -318,7 +313,7 @@ fi
 function set-server-name {
 echo "This recent CoWFC update allows you to set your server's name"
 echo "This is useful if you want to whitelabel your server, and not advertise it as CoWFC"
-read -p "Please enter the server name, or press ENTER to accept the default [CoWFC]: " servernameconfig
+read -rp "Please enter the server name, or press ENTER to accept the default [CoWFC]: " servernameconfig
 if [ -z "$servernameconfig" ] ; then
 echo "Using CoWFC as the server name."
 else
@@ -328,8 +323,7 @@ fi
 }
 function add-cron {
 echo "Checking if there is a cron available for $USER"
-crontab -l -u $USER |grep "@reboot sh /start-altwfc.sh >/cron-logs/cronlog 2>&1"
-if [ $? != "0" ] ; then
+if ! crontab -l -u "$USER" |grep "@reboot sh /start-altwfc.sh >/cron-logs/cronlog 2>&1" ; then
 echo "No cron job is currently installed"
 echo "Working the magic. Hang tight!"
 cat > /start-altwfc.sh <<EOF
@@ -342,13 +336,12 @@ cd /
 EOF
 chmod 777 /start-altwfc.sh
 mkdir -p /cron-logs
-which crontab
-if [ $? != 0 ] ; then
+if ! which crontab ; then
 apt-get install cron -y
 fi
 echo "Creating the cron job now!"
 echo "@reboot sh /start-altwfc.sh >/cron-logs/cronlog 2>&1" >/tmp/alt-cron
-crontab -u $USER /tmp/alt-cron
+crontab -u "$USER" /tmp/alt-cron
 echo "Done!"
 fi
 }
@@ -397,16 +390,15 @@ fi
 # but if we're running Debian, it should be enough for what we need this check
 # to do.
 if [ -f /etc/lsb-release ] ; then
-cat /etc/lsb-release | grep "14.04"
-if [ $? == 0 ] ; then
+if ! grep -q "14.04" /etc/lsb-release ; then
     CANRUN="TRUE"
 elif [ -f /var/www/.aws_install ] ; then
     CANRUN="TRUE"
 else
     echo "It looks like you are not running Ubuntu 14.04."
     echo "If you are running Ubuntu 16.04, this script MIGHT work, but dnsmasq doesn't work properly on platforms like Vultr."
-    read -p "Would you like to give it a try? (n):  [y/n] " giveitatry
-    if [ $giveitatry == y ] ; then
+    read -rp "Would you like to give it a try? (n):  [y/n] " giveitatry
+    if [ "$giveitatry" == "y" ] ; then
     	CANRUN="TRUE"
     else
         CANRUN="FALSE"
@@ -415,19 +407,18 @@ fi
 fi
 
 # Determine if our script can run
-if [ $CANRUN == "TRUE" ] ; then
+if [ "$CANRUN" == "TRUE" ] ; then
     # Our script can run since we are on Ubuntu
     # Put commands or functions on these lines to continue with script execution.
     # The first thing we will do is to update our package repos but let's also make sure that the user is running the script in the proper directory /var/www
-    if [ $PWD == "/var/www" ] ; then
+    if [ "$PWD" == "/var/www" ] ; then
         apt-get update
         # Let's install required packages first.
         install_required_packages
         # Then we will check to see if the Gits for CoWFC and dwc_network_server_emulator exist
         if [ ! -d "/var/www/CoWFC" ] ; then
             echo "Git for CoWFC does not exist in /var/www/"
-	    git clone https://github.com/kyle95wm/CoWFC.git
-	    if [ $? != 0 ] ; then
+	    if ! git clone https://github.com/kyle95wm/CoWFC.git ; then
 	    	echo "GIT CLONE FAILED! EXITING....."
 	    	exit 4
 	    fi
@@ -436,8 +427,7 @@ if [ $CANRUN == "TRUE" ] ; then
         if [ ! -d "/var/www/dwc_network_server_emulator" ] ; then
             echo "Git for dwc_network_server_emulator does not exist in /var/www"
             #git clone https://github.com/mh9924/dwc_network_server_emulator.git
-            git clone https://github.com/kyle95wm/dwc_network_server_emulator.git
-            if [ $? != 0 ] ; then
+            if ! git clone https://github.com/kyle95wm/dwc_network_server_emulator.git ; then
             	echo "GIT CLONE FAILED! EXITING......"
             	exit 4
             fi
@@ -459,20 +449,10 @@ set-server-name # Set your server's name
 cat >>/etc/apache2/apache2.conf <<EOF
 HttpProtocolOptions Unsafe LenientMethods Allow0.9
 EOF
-echo "Disabling un-used features that came with the CoWFC source...."
-mkdir /var/www/html/_admin/.disabled
-mv "/var/www/html/_admin/Fc Bans.php" "/var/www/html/_admin/.disabled"
-if [ $? != "0" ] ; then
-echo "FAILED!"
-fi
-mv "/var/www/html/_admin/Sn Bans.php" "/var/www/html/_admin/.disabled"
-if [ $? != "0" ] ; then
-echo "FAILED!"
-fi
 echo "Thank you for installing CoWFC."
 echo "If you wish to access the admin GUI, please go to http://$IP/?page=admin&section=Dashboard"
-read -p "Please hit the ENTER key to reboot now, or press ctrl+c and reboot whenever it is convenient for you: [ENTER] " rebootenterkey
-if [ -z $rebootenterkey ] ; then
+read -rp "Please hit the ENTER key to reboot now, or press ctrl+c and reboot whenever it is convenient for you: [ENTER] " rebootenterkey
+if [ -z "$rebootenterkey" ] ; then
 reboot
 fi
 # Let's make our hidden file so that our script will know that we've already installed the server
