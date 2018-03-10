@@ -34,6 +34,8 @@ export LC_ALL=en_US.UTF-8
 touch /var/www/.locale-done
 
 # Variables used by the script in various sections to pre-fill long commandds
+C1="0" # A counting variable
+C2="0" # A counting variable
 IP="" # Used for user input
 mod1="proxy" # This is a proxy mod that is dependent on the other 2
 mod2="proxy_http" # This is related to mod1
@@ -418,19 +420,26 @@ if [ "$CANRUN" == "TRUE" ] ; then
         # Then we will check to see if the Gits for CoWFC and dwc_network_server_emulator exist
         if [ ! -d "/var/www/CoWFC" ] ; then
             echo "Git for CoWFC does not exist in /var/www/"
-	    if ! git clone https://github.com/kyle95wm/CoWFC.git ; then
-	    	echo "GIT CLONE FAILED! EXITING....."
-	    	exit 4
-	    fi
-            #git clone https://github.com/mh9924/CoWFC.git
+	    while ! git clone https://github.com/kyle95wm/CoWFC.git && [ "$C1" -le "4" ] ; do
+	    	echo "GIT CLONE FAILED! Retrying....."
+            (( C1=C1+1 ))
+	    done
+if [ "$C1" == "5" ] ; then
+    echo "Giving up"
+    exit 1
+fi
         fi
         if [ ! -d "/var/www/dwc_network_server_emulator" ] ; then
             echo "Git for dwc_network_server_emulator does not exist in /var/www"
             #git clone https://github.com/mh9924/dwc_network_server_emulator.git
-            if ! git clone https://github.com/kyle95wm/dwc_network_server_emulator.git ; then
-            	echo "GIT CLONE FAILED! EXITING......"
-            	exit 4
-            fi
+            while ! git clone https://github.com/kyle95wm/dwc_network_server_emulator.git && [ "$C2" -le "4" ] ; do
+            	echo "GIT CLONE FAILED! Retrying......"
+                (( C2=C2+1 ))
+            done
+if [ "$C2" == "5" ] ; then
+    echo "Giving up"
+    exit 1
+fi
             echo "Setting proper file permissions"
             chmod 777 /var/www/dwc_network_server_emulator/ -R
         fi
