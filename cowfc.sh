@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 # DWC Network Installer script by kyle95wm/beanjr - re-written for CoWFC
+# Warn Raspberry Pi users - probably a better way of doing this
+if [ -d /home/pi/ ] ; then
+    echo "THIS SCRIPT IS NOT SUPPORTED ON RASPBERRY PI!"
+    echo "Please use the older script here: https://github.com/kyle95wm/dwc_network_installer"
+    exit 1
+fi
 # Check if we already installed the server
 if [ -f /etc/.dwc_installed ] ; then
 echo "You already installed CoWFC. There is no need to re-run it.
