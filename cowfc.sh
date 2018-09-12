@@ -43,6 +43,7 @@ touch /var/www/.locale-done
 C1="0" # A counting variable
 C2="0" # A counting variable
 IP="" # Used for user input
+interface="" # Used for user input
 mod1="proxy" # This is a proxy mod that is dependent on the other 2
 mod2="proxy_http" # This is related to mod1
 mod3="php7.1"
@@ -230,6 +231,12 @@ read -re IP
 cat >>/etc/dnsmasq.conf <<EOF # Adds your IP you provide to the end of the DNSMASQ config file
 address=/nintendowifi.net/$IP
 address=/wiimmfi.de/$IP
+EOF
+clear
+ifconfig
+read -p "Please type your primary interfaces's name (e.g - eth0): " interface
+cat >>/etc/dnsmasq.conf <<EOF
+interface="$interface"
 EOF
 clear
 echo "DNSMasq setup completed!"
