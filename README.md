@@ -2,10 +2,9 @@
 
 This script installs the CoWFC front-end and back-end from https://github.com/mh9924/CoWFC
 
-# BUGS
+# CONTRIBUTING
 
-# TODO
-- Automate install for HTML5 Landed template
+Please open pull requests for the dev branch.
 
 # How to use
 ## Phase 1
