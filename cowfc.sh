@@ -405,19 +405,13 @@ fi
 # but if we're running Debian, it should be enough for what we need this check
 # to do.
 if [ -f /etc/lsb-release ] ; then
-if grep -q "14.04" /etc/lsb-release ; then
+if grep -q "14.04" /etc/lsb-release || grep -q "16.04" /etc/lsb-release ; then
     CANRUN="TRUE"
 elif [ -f /var/www/.aws_install ] ; then
     CANRUN="TRUE"
 else
-    echo "It looks like you are not running Ubuntu 14.04."
-    echo "If you are running Ubuntu 16.04, this script MIGHT work, but dnsmasq doesn't work properly on platforms like Vultr."
-    read -rp "Would you like to give it a try? (n):  [y/n] " giveitatry
-    if [ "$giveitatry" == "y" ] ; then
-    	CANRUN="TRUE"
-    else
-        CANRUN="FALSE"
-    fi
+    echo "It looks like you are not running on a supported OS."
+    echo "Please open an issue and request support for this platform."
 fi
 fi
 
