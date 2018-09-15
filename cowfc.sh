@@ -234,7 +234,7 @@ address=/wiimmfi.de/$IP
 EOF
 clear
 ifconfig
-read -p "Please type your primary interfaces's name (e.g - eth0): " interface
+read -rp "Please type your primary interfaces's name (e.g - eth0): " interface
 cat >>/etc/dnsmasq.conf <<EOF
 interface="$interface"
 EOF
@@ -351,7 +351,7 @@ cd /
 EOF
 chmod 777 /start-altwfc.sh
 mkdir -p /cron-logs
-if ! which crontab ; then
+if ! command -v crontab ; then
 apt-get install cron -y
 fi
 echo "Creating the cron job now!"
