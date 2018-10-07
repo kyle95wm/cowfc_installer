@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # DWC Network Installer script by kyle95wm/beanjr - re-written for CoWFC
 # Warn Raspberry Pi users - probably a better way of doing this
 if [ -d /home/pi/ ] ; then
