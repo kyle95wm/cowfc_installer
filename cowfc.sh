@@ -221,13 +221,16 @@ function dns_config {
 # This function will configure dnsmasq
 echo "----------Lets configure DNSMASQ now----------"
 sleep 3s
-echo "Adding Google DNS (8.8.8.8) to config"
+# Decided to take this step out, as doing so will create what's known as an open resolver.
+# Having an open resolver is a security risk and is not a good idea.
+# This means that DNS will be restricted to ONLY looking up Nintendo domains.
+#echo "Adding Google DNS (8.8.8.8) to config"
 # We add Google's DNS server to our server so that anyone with our DNS server can still resolve hostnames to IP
 # addresses outside our DNS server. Useful for Dolphin testing
-cat >>/etc/dnsmasq.conf <<EOF
-server=8.8.8.8
-EOF
-sleep 2s
+#cat >>/etc/dnsmasq.conf <<EOF
+#server=8.8.8.8
+#EOF
+#sleep 2s
 echo "What is your EXTERNAL IP?"
 echo "NOTE: If you plan on using this on a LAN, put the IP of your Linux system instead"
 echo "It's also best practice to make this address static in your /etc/network/interfaces file"
