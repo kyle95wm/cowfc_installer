@@ -1,7 +1,7 @@
 #!/bin/bash
 DISCONTINUED="true"
 if [ $DISCONTINUED="true" ] ; then
-	echo "Sorry, but this script has been discontinued. Please use the installer at https://github.com/EnergyCube/dwc_network_installer instead."
+	echo "Sorry, but this script has been discontinued. Please use the installer at https://github.com/EnergyCube/cowfc_installer instead."
 	exit 1
 fi
 echo "##### WARNING!!!!! ##### - Recently, Wiimmfi has undergone some changes which makes it so that their servers are more secure from hackers."
